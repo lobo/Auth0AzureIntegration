@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         
+        A0Lock.sharedLock().applicationLaunchedWithOptions(launchOptions)
         let windowslive = A0WebViewAuthenticator(connectionName: kWindowsLiveConnectionName, lock: A0Lock.sharedLock())
         A0Lock.sharedLock().registerAuthenticators([windowslive]);
         A0LockLogger.logAll()
