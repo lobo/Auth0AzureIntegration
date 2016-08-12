@@ -1,48 +1,50 @@
 # Auth0AzureIntegration
 
-This sample exposes how to integrate Auth0 into your Windows Azure application for authentication with Microsoft Account.
+This sample explains how to integrate Auth0 into your Windows Azure application while authenticating with a Microsoft Account.
 
-Actually it is Windows Azure Mobile App example which you can download from Azure portal with changes for integration of Auth0 authentication
+Actually, it is a Windows Azure Mobile App example, which you can download from the Azure portal, but that has been modified in order to use Auth0 authentication.
 
-I. You need to create Azure Mobile Apps as described in https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-get-started/ ,then you can download Azure test application.
 
-II. Auth0: Configure Microsoft Account as described in https://auth0.com/docs/connections/social/microsoft-account
-![Microsofr Account](https://cloud.githubusercontent.com/assets/5472858/17613278/104f879e-6064-11e6-8d91-eab521076591.png)
+### Step 1: Create an Azure Mobile App
+You need to create an Azure Mobile App as described [here](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-get-started/). Then as `Step III` from that tutorial explains, go ahead and download the Azure test application.
 
-III. Set up Authentication on Azure App Service
 
-Log onto the Azure Portal, click on All Resources, then your Azure Mobile Apps application (from Step 1).  
+### Step 2: Configure a Microsoft Account
+In the Auth0 Dashboard: configure a Microsoft Account as described [here](https://auth0.com/docs/connections/social/microsoft-account).
+![Microsoft Account](/media/image1.png)
 
-Click on All Settings, then Authentication / Authorization. Now you are in the right place to be setting up authentication.
+### Step 3: Set up Authentication on the Azure App Service
 
-Turn App Service Authentication on
+Log onto the Azure Portal, click on `All Resources`, then go to your `Azure Mobile App` application (the one from Step 1).  
 
-Set the action to take when the request is not authenticated to Allow request
+Click on `All Settings`, then `Authentication / Authorization`. Now you are in the right place to start setting up the authentication.
 
-Turn the Token Store to on (under Advanced Settings).
+Now we have to turn `App Service Authentication` on. Set the action you will take when the request is not authenticated to have the value `Allow request`.
+In the `Advance Settings` section you may turn the `Token Store` to on.
 
-Now click on Microsoft Account. Cut and paste the Client ID and Client Secret from Step 2, and select the same boxes as you did in Step 2 – these are the claims you are requesting be provided to you.
-![Azure Portal](https://cloud.githubusercontent.com/assets/5472858/17613279/1053348e-6064-11e6-9361-a585b7015b12.png)
+Now click on your Microsoft Account. Cut and paste the `Client ID` and `Client Secret` from Step 2, and select the same boxes as you did in Step 2 – these are the claims you are requesting to be provided to you.
+![Azure Portal](/media/image1.png)
 
-IV. Restrict permissions to authenticated users
+### Step 4: Restrict permissions to authenticated users
 
-In your Mobile App's Settings, click Easy Tables and select your table. Click Change permissions, select Authenticated access only for all permissions, then click Save. 
-![](https://cloud.githubusercontent.com/assets/5472858/17613280/105a99f4-6064-11e6-80e9-5d62b75689b1.png)
+In your Mobile App's Settings, click `Easy Tables` and select your table. Click `Change permissions`, select `Authenticated` access only for all permissions, then click `Save`. 
+![](/media/image3.png)
 
-V. Auth0: Enabling WAMS add-on for your client
+### Step 5: Auth0: Enabling WAMS add-on for your client
 
-Clients -> your client -> Addons -> Microsoft Azure Mobile Services
+In the Auth0 Dashboard, head to: `Clients` -> your client -> `Addons` -> `Microsoft Azure Mobile Services`
 
-NOTE: With App Services/Mobile Apps, the master key is no longer used/required, that is why it is no longer available on the portal. You can just enter some symbols in the field “Master Key”.
-![](https://cloud.githubusercontent.com/assets/5472858/17613281/1061ddae-6064-11e6-8925-0282199a2fbe.png)
+NOTE: With App Services/Mobile Apps, the master key is no longer used/required, that is why it is no longer available on the portal. You can just enter some symbols in the field `Master Key`.
+![](image4.png)
 
-Then you can integrate Auth0 into your Azure applocation. 
-For this you need to add 
+Now you have to integrate Auth0 into your Azure application.
+
+In your `Podfile` add the following:
+
 ```
 pod 'Lock', '~> 1.26'
 pod 'SimpleKeychain'
 ```
-to your pod-file
 
 And `Auth0ClientId` and `Auth0Domain` to your Info.plist
 
