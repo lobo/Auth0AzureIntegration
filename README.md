@@ -5,16 +5,18 @@ This sample explains how to integrate Auth0 into your Windows Azure application 
 Actually, it is a Windows Azure Mobile App example, which you can download from the Azure portal, but that has been modified in order to use Auth0 authentication.
 
 
-### Step 1: Create an Azure Mobile App
+
+## Step 1: Create an Azure Mobile App
 You need to create an Azure Mobile App as described [here](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-get-started/). Then as `Step III` from that tutorial explains, go ahead and download the Azure test application.
 
 
-### Step 2: Configure a Microsoft Account
+## Step 2: Configure a Microsoft Account
 In the Auth0 Dashboard: configure a Microsoft Account as described [here](https://auth0.com/docs/connections/social/microsoft-account).
 ![Microsoft Account](/media/image1.png)
 
 
-### Step 3: Set up Authentication on the Azure App Service
+
+## Step 3: Set up Authentication on the Azure App Service
 
 Log onto the Azure Portal, click on `All Resources`, then go to your `Azure Mobile App` application (the one from Step 1).  
 
@@ -27,13 +29,15 @@ Now click on your Microsoft Account. Cut and paste the `Client ID` and `Client S
 ![Azure Portal](/media/image2.png)
 
 
-### Step 4: Restrict permissions to authenticated users
+
+## Step 4: Restrict permissions to authenticated users
 
 In your Mobile App's Settings, click `Easy Tables` and select your table. Click `Change permissions`, select `Authenticated` access only for all permissions, then click `Save`. 
 ![](/media/image3.png)
 
 
-### Step 5: Auth0: Enabling WAMS add-on for your client
+
+## Step 5: Auth0: Enabling WAMS add-on for your client
 
 In the Auth0 Dashboard, head to: `Clients` -> your client -> `Addons` -> `Microsoft Azure Mobile Services`
 
