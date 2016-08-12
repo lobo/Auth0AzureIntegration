@@ -23,7 +23,7 @@ Now we have to turn `App Service Authentication` on. Set the action you will tak
 In the `Advance Settings` section you may turn the `Token Store` to on.
 
 Now click on your Microsoft Account. Cut and paste the `Client ID` and `Client Secret` from Step 2, and select the same boxes as you did in Step 2 – these are the claims you are requesting to be provided to you.
-![Azure Portal](/media/image1.png)
+![Azure Portal](/media/image2.png)
 
 ### Step 4: Restrict permissions to authenticated users
 
