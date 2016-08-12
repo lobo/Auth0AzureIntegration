@@ -13,6 +13,7 @@ You need to create an Azure Mobile App as described [here](https://azure.microso
 In the Auth0 Dashboard: configure a Microsoft Account as described [here](https://auth0.com/docs/connections/social/microsoft-account).
 ![Microsoft Account](/media/image1.png)
 
+
 ### Step 3: Set up Authentication on the Azure App Service
 
 Log onto the Azure Portal, click on `All Resources`, then go to your `Azure Mobile App` application (the one from Step 1).  
@@ -25,10 +26,12 @@ In the `Advance Settings` section you may turn the `Token Store` to on.
 Now click on your Microsoft Account. Cut and paste the `Client ID` and `Client Secret` from Step 2, and select the same boxes as you did in Step 2 – these are the claims you are requesting to be provided to you.
 ![Azure Portal](/media/image2.png)
 
+
 ### Step 4: Restrict permissions to authenticated users
 
 In your Mobile App's Settings, click `Easy Tables` and select your table. Click `Change permissions`, select `Authenticated` access only for all permissions, then click `Save`. 
 ![](/media/image3.png)
+
 
 ### Step 5: Auth0: Enabling WAMS add-on for your client
 
