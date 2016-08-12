@@ -1,141 +1,98 @@
 # Auth0AzureIntegration
 
-This sample exposes how to integrate Amazon Cognito with Auth0.
+This sample exposes how to integrate Auth0 into your Windows Azure application for authentication with Microsoft Account.
 
-You can integrate your mobile app with two solutions: Auth0 to get authentication with either Social Providers (Facebook, Twitter, etc.), Enterprise providers or regular Username and Password, and Amazon Cognito, to get a backend for your app.
+Actually it is Windows Azure Mobile App example which you can download from Azure portal with changes for integration of Auth0 authentication
 
-First of all you need to configure Amazon Web Services as describe in https://auth0.com/blog/integrating-auth0-with-amazon-cognito-in-ios/
+1. You need to create Azure Mobile Apps as described in https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-get-started/ ,then you can download Azure test application.
 
-Note: In order for Cognito to verify signature of your Id Token, the signature algorithm must be RS256. Setting this to RS256 in auth0 console ("Apps->Settings->Show Advanced Settings->OAuth") will allow Cognito to fetch public key and certificate from your issuer's jwks uri
+2. Auth0: Configure Microsoft Account as described in https://auth0.com/docs/connections/social/microsoft-account
 
-Then you can integrate Amazon Cognito into your applocation. 
+3. Set up Authentication on Azure App Service
+
+Log onto the Azure Portal, click on All Resources, then your Azure Mobile Apps application (from Step 1).  
+
+Click on All Settings, then Authentication / Authorization. Now you are in the right place to be setting up authentication.
+
+Turn App Service Authentication on
+
+Set the action to take when the request is not authenticated to Allow request
+
+Turn the Token Store to on (under Advanced Settings).
+
+Now click on Microsoft Account. Cut and paste the Client ID and Client Secret from Step 2, and select the same boxes as you did in Step 2 – these are the claims you are requesting be provided to you.
+
+4. Restrict permissions to authenticated users
+
+In your Mobile App's Settings, click Easy Tables and select your table. Click Change permissions, select Authenticated access only for all permissions, then click Save. 
+
+5. Auth0: Enabling WAMS add-on for your client
+
+Clients -> your client -> Addons -> Microsoft Azure Mobile Services
+
+NOTE: With App Services/Mobile Apps, the master key is no longer used/required, that is why it is no longer available on the portal. You can just enter some symbols in the field “Master Key”.
+
+
+Then you can integrate Auth0 into your Azure applocation. 
 For this you need to add 
 ```
-  pod 'AWSCognito'
+pod 'Lock', '~> 1.26'
+pod 'SimpleKeychain'
 ```
 to your pod-file
 
+And `Auth0ClientId` and `Auth0Domain` to your Info.plist
 
 #### Important Snippets
 
-Note: All these snippets are located in the `LoginManager.swift` file.
+Note: All these snippets are located in the `AppDelegate.swift`, `LoginViewController.swift` and `ToDoTableViewController.swift` files.
 
-##### 1. Implement Cognito custom identity provider manager 
+##### 1. Register the authenticator 
 ```swift
-class CustomIdentityProviderManager: NSObject, AWSIdentityProviderManager{
-    var tokens : [NSObject : AnyObject]?
-    
-    init(tokens: [NSObject : AnyObject]) {
-        self.tokens = tokens
-    }
-    
-    @objc func logins() -> AWSTask {
-        return AWSTask(result: tokens)
-    }
-}
+    let windowslive = A0WebViewAuthenticator(connectionName: "windowslive", lock: A0Lock.sharedLock())
+    A0Lock.sharedLock().registerAuthenticators([windowslive]);
 ```
-##### 2. Initialize Amazon Cognito service manager with poolId 
+##### 2. Login to Microsoft Account 
 ```swift
-    init() {
-        let poolId = NSBundle.mainBundle().objectForInfoDictionaryKey(kCognitoPoolId) as! String
-        AWSLogger.defaultLogger().logLevel = AWSLogLevel.Verbose
-        self.credentialsProvider = AWSCognitoCredentialsProvider(regionType:AWSRegionType.USWest2, identityPoolId:poolId)
-        let configuration = AWSServiceConfiguration(region:AWSRegionType.USWest2, credentialsProvider:self.credentialsProvider)
-        AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = configuration
-    }
+    A0Lock.sharedLock().identityProviderAuthenticator().authenticateWithConnectionName("windowslive", 
+	parameters: nil, success: success, failure: failure)
 ```
-##### 3. Make Amazon login with idToken which you get after Auth0 authentication 
+##### 3. Get a delegation token for WAMS as described in https://auth0.com/docs/libraries/lock-ios/delegation-api 
 ```swift
-    func doAmazonLogin(idToken: String, success : () -> (), _ failure : (NSError) -> ()) {
-        var task: AWSTask?
+  let idToken = ...
+  let dictionary = [
+            “id_token": idToken,
+    A0ParameterAPIType: "wams"]
+  let parameters = A0AuthParameters.newWithDictionary(dictionary)
         
-        if self.credentialsProvider?.identityProvider.identityProviderManager == nil || idToken != MyApplication.sharedInstance.retrieveIdToken() {
-            let IDPUrl = NSBundle.mainBundle().objectForInfoDictionaryKey(kCognitoIDPUrl) as! String
-            let logins = [IDPUrl: idToken]
-            task = self.initializeClients(logins)
-        } else {
-            self.credentialsProvider?.invalidateCachedTemporaryCredentials()
-            task = self.credentialsProvider?.getIdentityId()
-        }
-        task!.continueWithBlock { (task: AWSTask!) -> AnyObject! in
-            if (task.error != nil) {
-                failure(task.error!)
-            } else {
-                // the task result will contain the identity id
-                let cognitoId:String? = task.result as? String
-                MyApplication.sharedInstance.storeCognitoToken(cognitoId)
-                success()
-            }
-            return nil
-        }
-    }
-    
-    func initializeClients(logins: [NSObject : AnyObject]?) -> AWSTask? {
-        print("Initializing Clients with logins")
-        
-        let manager = CustomIdentityProviderManager(tokens: logins!)
-        self.credentialsProvider?.setIdentityProviderManagerOnce(manager)
-
-        return self.credentialsProvider?.getIdentityId()
-    }
+  A0Lock.sharedLock().apiClient().fetchDelegationTokenWithParameters(parameters,
+    success:success, failure:failure);
 ```
-
+##### 4. Use the delegation token for WAMS 
+```swift
+  let client = MSClient(applicationURLString: "https://<Your_Azure_Mobile_App_Name>.azurewebsites.net")
+        
+  let token = //delegation token
+  let userId = //Microsoft Account user id
+  let user:MSUser = MSUser(userId: userId)
+  user.mobileServiceAuthenticationToken = token;        
+  client.currentUser = user;
+```
 Before using the example please make sure that you change some keys in Info.plist with your data:
 - Auth0ClientId
 - Auth0Domain
-- CognitoIDPUrl
-- CognitoPoolID
-- TwitterConsumerKey
-- TwitterConsumerSecret
-- FacebookAppID
-- GOOGLE_APP_ID
-- REVERSED_CLIENT_ID
-- CFBundleURLSchemes
 
-```
-<key>CFBundleTypeRole</key>
-<string>None</string>
-<key>CFBundleURLName</key>
-<string>auth0</string>
-<key>CFBundleURLSchemes</key>
-<array>
-<string>a01T8XeajR2FhDBAAz7JQ22mmzqCMoqzud</string>
-</array>
+For more iformation about integrating of auth0 with Azure Mobile Apps please see link
 
-a01T8XeajR2FhDBAAz7JQ22mmzqCMoqzud -> a0<Auth0ClientId>
-```
-```
-<key>CFBundleTypeRole</key>
-<string>None</string>
-<key>CFBundleURLName</key>
-<string>facebook</string>
-<key>CFBundleURLSchemes</key>
-<array>
-<string>fb1038202126265858</string>
-</array>
+https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-migrating-from-mobile-services/
 
-fb1038202126265858 -> fb<FacebookAppID>
-```
-```
-<key>CFBundleTypeRole</key>
-<string>None</string>
-<key>CFBundleURLName</key>
-<string>Google</string>
-<key>CFBundleURLSchemes</key>
-<array>
-<string>com.googleusercontent.apps.514652084725-lbq4ulvpadvb4mmumqg7q3b46mvnshcd</string>
-</array>
+https://shellmonger.com/2016/03/22/integrating-auth0-with-azure-mobile-apps-javascript-client/ 
 
-com.googleusercontent.apps.514652084725-lbq4ulvpadvb4mmumqg7q3b46mvnshcd -> REVERSED_CLIENT_ID
-```
+https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-how-to-configure-microsoft-authentication/
 
-For more iformation about integrating of auth0 with Amazon cognito please see link
+https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-get-started-users/
 
-https://auth0.com/blog/integrating-auth0-with-amazon-cognito-in-ios/
+https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-how-to-use-client-library/
 
-http://docs.aws.amazon.com/mobile/sdkforios/developerguide/
-
-https://forums.aws.amazon.com/thread.jspa?messageID=696941
-
-http://docs.aws.amazon.com/cognito/latest/developerguide/open-id.html
+https://auth0.com/blog/Authenticate-Azure-Mobile-Services-apps-with-Everything-using-Auth0/
 
