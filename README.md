@@ -7,6 +7,7 @@ Actually it is Windows Azure Mobile App example which you can download from Azur
 I. You need to create Azure Mobile Apps as described in https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-get-started/ ,then you can download Azure test application.
 
 II. Auth0: Configure Microsoft Account as described in https://auth0.com/docs/connections/social/microsoft-account
+![Microsofr Account](https://cloud.githubusercontent.com/assets/5472858/17613278/104f879e-6064-11e6-8d91-eab521076591.png)
 
 III. Set up Authentication on Azure App Service
 
@@ -21,17 +22,19 @@ Set the action to take when the request is not authenticated to Allow request
 Turn the Token Store to on (under Advanced Settings).
 
 Now click on Microsoft Account. Cut and paste the Client ID and Client Secret from Step 2, and select the same boxes as you did in Step 2 – these are the claims you are requesting be provided to you.
+![Azure Portal](https://cloud.githubusercontent.com/assets/5472858/17613279/1053348e-6064-11e6-9361-a585b7015b12.png)
 
 IV. Restrict permissions to authenticated users
 
 In your Mobile App's Settings, click Easy Tables and select your table. Click Change permissions, select Authenticated access only for all permissions, then click Save. 
+![](https://cloud.githubusercontent.com/assets/5472858/17613280/105a99f4-6064-11e6-80e9-5d62b75689b1.png)
 
 V. Auth0: Enabling WAMS add-on for your client
 
 Clients -> your client -> Addons -> Microsoft Azure Mobile Services
 
 NOTE: With App Services/Mobile Apps, the master key is no longer used/required, that is why it is no longer available on the portal. You can just enter some symbols in the field “Master Key”.
-
+![](https://cloud.githubusercontent.com/assets/5472858/17613281/1061ddae-6064-11e6-8925-0282199a2fbe.png)
 
 Then you can integrate Auth0 into your Azure applocation. 
 For this you need to add 
