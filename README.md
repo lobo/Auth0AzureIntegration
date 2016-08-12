@@ -50,7 +50,7 @@ Add `Auth0ClientId` and `Auth0Domain` to your `Info.plist` file.
 
 ## Important snippets
 
-Note: All these snippets are located in the `AppDelegate.swift`, `LoginViewController.swift` and `ToDoTableViewController.swift` files.
+* Note: All these snippets are located in the `AppDelegate.swift`, `LoginViewController.swift` and `ToDoTableViewController.swift` files.
 
 ### 1. Register the authenticator 
 
@@ -64,7 +64,7 @@ Note: All these snippets are located in the `AppDelegate.swift`, `LoginViewContr
     A0Lock.sharedLock().identityProviderAuthenticator().authenticateWithConnectionName("windowslive", 
 	parameters: nil, success: success, failure: failure)
 ```
-### 3. Get a delegation token for WAMS as described in https://auth0.com/docs/libraries/lock-ios/delegation-api 
+### 3. Get a delegation token for WAMS as described [here](https://auth0.com/docs/libraries/lock-ios/delegation-api)
 
 ```swift
   let idToken = ...
@@ -76,6 +76,7 @@ Note: All these snippets are located in the `AppDelegate.swift`, `LoginViewContr
   A0Lock.sharedLock().apiClient().fetchDelegationTokenWithParameters(parameters,
     success:success, failure:failure);
 ```
+
 ### 4. Use the delegation token for WAMS 
 
 ```swift
@@ -92,17 +93,22 @@ Before using the example please make sure that you change some keys in Info.plis
 - Auth0ClientId
 - Auth0Domain
 
-For more iformation about integrating of auth0 with Azure Mobile Apps please see link
+For more information about integrating Auth0 with `Azure Mobile Apps` please check the following links:
 
-https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-migrating-from-mobile-services/
+* [Link1](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-migrating-from-mobile-services/)
+* [Link2](https://shellmonger.com/2016/03/22/integrating-auth0-with-azure-mobile-apps-javascript-client/ )
+* [Link3](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-how-to-configure-microsoft-authentication/)
+* [Link4](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-get-started-users/)
+* [Link5](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-how-to-use-client-library/)
+* [Link6](https://auth0.com/blog/Authenticate-Azure-Mobile-Services-apps-with-Everything-using-Auth0/)
 
-https://shellmonger.com/2016/03/22/integrating-auth0-with-azure-mobile-apps-javascript-client/ 
 
-https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-how-to-configure-microsoft-authentication/
 
-https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-get-started-users/
 
-https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-how-to-use-client-library/
 
-https://auth0.com/blog/Authenticate-Azure-Mobile-Services-apps-with-Everything-using-Auth0/
+
+
+
+
+
 
