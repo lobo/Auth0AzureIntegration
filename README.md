@@ -46,23 +46,26 @@ pod 'Lock', '~> 1.26'
 pod 'SimpleKeychain'
 ```
 
-And `Auth0ClientId` and `Auth0Domain` to your Info.plist
+Add `Auth0ClientId` and `Auth0Domain` to your `Info.plist` file.
 
-#### Important Snippets
+## Important snippets
 
 Note: All these snippets are located in the `AppDelegate.swift`, `LoginViewController.swift` and `ToDoTableViewController.swift` files.
 
-##### 1. Register the authenticator 
+### 1. Register the authenticator 
+
 ```swift
     let windowslive = A0WebViewAuthenticator(connectionName: "windowslive", lock: A0Lock.sharedLock())
     A0Lock.sharedLock().registerAuthenticators([windowslive]);
 ```
-##### 2. Login to Microsoft Account 
+### 2. Login to Microsoft Account 
+
 ```swift
     A0Lock.sharedLock().identityProviderAuthenticator().authenticateWithConnectionName("windowslive", 
 	parameters: nil, success: success, failure: failure)
 ```
-##### 3. Get a delegation token for WAMS as described in https://auth0.com/docs/libraries/lock-ios/delegation-api 
+### 3. Get a delegation token for WAMS as described in https://auth0.com/docs/libraries/lock-ios/delegation-api 
+
 ```swift
   let idToken = ...
   let dictionary = [
@@ -73,7 +76,8 @@ Note: All these snippets are located in the `AppDelegate.swift`, `LoginViewContr
   A0Lock.sharedLock().apiClient().fetchDelegationTokenWithParameters(parameters,
     success:success, failure:failure);
 ```
-##### 4. Use the delegation token for WAMS 
+### 4. Use the delegation token for WAMS 
+
 ```swift
   let client = MSClient(applicationURLString: "https://<Your_Azure_Mobile_App_Name>.azurewebsites.net")
         
@@ -83,6 +87,7 @@ Note: All these snippets are located in the `AppDelegate.swift`, `LoginViewContr
   user.mobileServiceAuthenticationToken = token;        
   client.currentUser = user;
 ```
+
 Before using the example please make sure that you change some keys in Info.plist with your data:
 - Auth0ClientId
 - Auth0Domain
