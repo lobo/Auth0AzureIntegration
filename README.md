@@ -85,17 +85,17 @@ Before using the example please make sure that you change some keys in Info.plis
 - Auth0ClientId
 - Auth0Domain
 
-For more iformation about integrating of auth0 with Azure Mobile Apps please see link
+For more information about how to integrate Auth0 with Azure Mobile Apps please see the following links:
 
-https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-migrating-from-mobile-services/
+* [Link 1](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-migrating-from-mobile-services/)
 
-https://shellmonger.com/2016/03/22/integrating-auth0-with-azure-mobile-apps-javascript-client/ 
+* [Link 2](https://shellmonger.com/2016/03/22/integrating-auth0-with-azure-mobile-apps-javascript-client/)
 
-https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-how-to-configure-microsoft-authentication/
+* [Link 3](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-how-to-configure-microsoft-authentication/)
 
-https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-get-started-users/
+* [Link 4](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-get-started-users/)
 
-https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-how-to-use-client-library/
+* [Link 5](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-ios-how-to-use-client-library/)
 
-https://auth0.com/blog/Authenticate-Azure-Mobile-Services-apps-with-Everything-using-Auth0/
+* [Link 6](https://auth0.com/blog/Authenticate-Azure-Mobile-Services-apps-with-Everything-using-Auth0/)
 
